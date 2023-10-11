@@ -121,6 +121,18 @@ namespace SlabOnGradient
         }
         #endregion
 
+        public List<Curve> BorderSlabLines { get; set; }
 
+        private string _borderSlabLinesElemIds;
+        public string BorderSlabLinesElemIds
+        {
+            get => _borderSlabLinesElemIds;
+            set => _borderSlabLinesElemIds = value;
+        }
+
+        public void GetBorderSlabLines()
+        {
+            BorderSlabLines = RevitGeometryUtils.GetBoundCurves(Uiapp, out _borderSlabLinesElemIds);
+        }
     }
 }

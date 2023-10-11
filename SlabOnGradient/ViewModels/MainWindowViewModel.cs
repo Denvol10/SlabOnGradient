@@ -66,6 +66,16 @@ namespace SlabOnGradient.ViewModels
         }
         #endregion
 
+        #region Элементы границы плиты
+        private string _borderSlabElemIds;
+
+        public string BorderSlabElemIds
+        {
+            get => _borderSlabElemIds;
+            set => Set(ref _borderSlabElemIds, value);
+        }
+        #endregion
+
         #region Команды
 
 
@@ -115,6 +125,23 @@ namespace SlabOnGradient.ViewModels
         }
 
         private bool CanGetRoadLines2CommandExecute(object parameter)
+        {
+            return true;
+        }
+        #endregion
+
+        #region Получение линий границ плиты
+        public ICommand GetBorderSlabCommand { get; }
+
+        private void OnGetBorderSlabCommandExecuted(object parameter)
+        {
+            RevitCommand.mainView.Hide();
+            RevitModel.GetBorderSlabLines();
+            BorderSlabElemIds = RevitModel.BorderSlabLinesElemIds;
+            RevitCommand.mainView.ShowDialog();
+        }
+
+        private bool CanGetBorderSlabCommandExecute(object parameter)
         {
             return true;
         }
@@ -198,6 +225,8 @@ namespace SlabOnGradient.ViewModels
             GetRoadLines1 = new LambdaCommand(OnGetRoadLines1CommandExecuted, CanGetRoadLines1CommandExecute);
 
             GetRoadLines2 = new LambdaCommand(OnGetRoadLines2CommandExecuted, CanGetRoadLines2CommandExecute);
+
+            GetBorderSlabCommand = new LambdaCommand(OnGetBorderSlabCommandExecuted, CanGetBorderSlabCommandExecute);
 
             CloseWindowCommand = new LambdaCommand(OnCloseWindowCommandExecuted, CanCloseWindowCommandExecute);
 
