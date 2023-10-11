@@ -68,6 +68,45 @@
         </Style>
     </Window.Resources>
     <StackPanel>
-        
+        <GroupBox Header="Ось трассы"
+                  Style="{StaticResource BorderGroupStyle}">
+            <UniformGrid Columns="2">
+                <UniformGrid Rows="2">
+                    <TextBlock Text="Линии оси трассы"
+                               Style="{StaticResource TextAboveButton}" />
+                    <Button Style="{StaticResource SelectButton}"
+                            Command="{Binding GetRoadAxis}" />
+                </UniformGrid>
+                <TextBox Text="{Binding RoadAxisElemIds, Mode=OneWay}"
+                         Style="{StaticResource SelectedItemsBox}" />
+            </UniformGrid>
+        </GroupBox>
+        <GroupBox Header="Верх покрытия"
+                  Style="{StaticResource BorderGroupStyle}">
+            <UniformGrid Rows="2">
+                <UniformGrid Columns="2">
+                    <UniformGrid Rows="2">
+                        <TextBlock Text="Линии на поверхности 1"
+                                   Style="{StaticResource TextAboveButton}"
+                                   VerticalAlignment="Bottom" />
+                        <Button Style="{StaticResource SelectButton}"
+                                Command="{Binding GetRoadLines1}" />
+                    </UniformGrid>
+                    <TextBox Text="{Binding RoadLineElemIds1, Mode=OneWay}"
+                             Style="{StaticResource SelectedItemsBox}" />
+                </UniformGrid>
+                <UniformGrid Columns="2"
+                             Margin="0,5">
+                    <UniformGrid Rows="2">
+                        <TextBlock Text="Линии на поверхности 2"
+                                   Style="{StaticResource TextAboveButton}" />
+                        <Button Style="{StaticResource SelectButton}"
+                                Command="{Binding GetRoadLines2}" />
+                    </UniformGrid>
+                    <TextBox Text="{Binding RoadLineElemIds2, Mode=OneWay}"
+                             Style="{StaticResource SelectedItemsBox}" />
+                </UniformGrid>
+            </UniformGrid>
+        </GroupBox>
     </StackPanel>
 </Window>
