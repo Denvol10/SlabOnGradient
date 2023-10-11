@@ -120,13 +120,50 @@ namespace SlabOnGradient.ViewModels
         }
         #endregion
 
+        #region Закрыть окно
+        public ICommand CloseWindowCommand { get; }
+
+        private void OnCloseWindowCommandExecuted(object parameter)
+        {
+            SaveSettings();
+            RevitCommand.mainView.Close();
+        }
+
+        private bool CanCloseWindowCommandExecute(object parameter)
+        {
+            return true;
+        }
         #endregion
+
+        #endregion
+
+        private void SaveSettings()
+        {
+            Properties.Settings.Default.RoadAxisElemIds = RoadAxisElemIds;
+            Properties.Settings.Default.Save();
+        }
 
 
         #region Конструктор класса MainWindowViewModel
         public MainWindowViewModel(RevitModelForfard revitModel)
         {
             RevitModel = revitModel;
+
+            #region Инициализация значений из Settings
+
+            #region Инициализация значения элементам оси из Settings
+            if (!(Properties.Settings.Default.RoadAxisElemIds is null))
+            {
+                string axisElementIdInSettings = Properties.Settings.Default.RoadAxisElemIds;
+                if (RevitModel.IsLinesExistInModel(axisElementIdInSettings) && !string.IsNullOrEmpty(axisElementIdInSettings))
+                {
+                    RoadAxisElemIds = axisElementIdInSettings;
+                    RevitModel.GetAxisBySettings(axisElementIdInSettings);
+                }
+            }
+            #endregion
+
+            #endregion
 
             #region Команды
 
@@ -135,6 +172,8 @@ namespace SlabOnGradient.ViewModels
             GetRoadLines1 = new LambdaCommand(OnGetRoadLines1CommandExecuted, CanGetRoadLines1CommandExecute);
 
             GetRoadLines2 = new LambdaCommand(OnGetRoadLines2CommandExecuted, CanGetRoadLines2CommandExecute);
+
+            CloseWindowCommand = new LambdaCommand(OnCloseWindowCommandExecuted, CanCloseWindowCommandExecute);
 
             #endregion
         }
