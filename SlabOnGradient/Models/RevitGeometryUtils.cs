@@ -25,7 +25,7 @@ namespace SlabOnGradient.Models
         public static List<Line> GetRoadLines(UIApplication uiapp, out string elementIds)
         {
             Selection sel = uiapp.ActiveUIDocument.Selection;
-            var selectedOnRoadSurface = sel.PickObjects(ObjectType.Element, "Select Road Lines");
+            var selectedOnRoadSurface = sel.PickObjects(ObjectType.Element, new DirectShapeClassFilter(), "Select Road Lines");
             var directShapesRoadSurface = selectedOnRoadSurface.Select(r => uiapp.ActiveUIDocument.Document.GetElement(r))
                                                                .OfType<DirectShape>();
             elementIds = ElementIdToString(directShapesRoadSurface);

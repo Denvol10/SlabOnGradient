@@ -140,6 +140,7 @@ namespace SlabOnGradient.ViewModels
         private void SaveSettings()
         {
             Properties.Settings.Default.RoadAxisElemIds = RoadAxisElemIds;
+            Properties.Settings.Default.RoadLineElemIds1 = RoadLineElemIds1;
             Properties.Settings.Default.Save();
         }
 
@@ -159,6 +160,18 @@ namespace SlabOnGradient.ViewModels
                 {
                     RoadAxisElemIds = axisElementIdInSettings;
                     RevitModel.GetAxisBySettings(axisElementIdInSettings);
+                }
+            }
+            #endregion
+
+            #region Инициализация значения элементам линии на поверхности 1
+            if (!(Properties.Settings.Default.RoadLineElemIds1 is null))
+            {
+                string line1ElementIdInSettings = Properties.Settings.Default.RoadLineElemIds1.ToString();
+                if (RevitModel.IsLinesExistInModel(line1ElementIdInSettings) && !string.IsNullOrEmpty(line1ElementIdInSettings))
+                {
+                    RoadLineElemIds1 = line1ElementIdInSettings;
+                    RevitModel.GetRoadLines1BySettings(line1ElementIdInSettings);
                 }
             }
             #endregion
