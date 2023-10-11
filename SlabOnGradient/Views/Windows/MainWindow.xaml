@@ -10,7 +10,7 @@
         Background="#f0f0f0"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Height="450"
+        Height="415"
         Width="350">
     <Window.DataContext>
         <vm:MainWindowViewModel />
