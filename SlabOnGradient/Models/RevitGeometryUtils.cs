@@ -13,7 +13,7 @@ namespace SlabOnGradient.Models
         public static List<Curve> GetCurvesByRectangle(UIApplication uiapp, out string elementIds)
         {
             Selection sel = uiapp.ActiveUIDocument.Selection;
-            var selectedElements = sel.PickElementsByRectangle(new DirectShapeClassFilter() ,"Select Road Axis");
+            var selectedElements = sel.PickElementsByRectangle(new DirectShapeClassFilter(), "Select Road Axis");
             var directshapeRoadAxis = selectedElements.OfType<DirectShape>();
             elementIds = ElementIdToString(directshapeRoadAxis);
             var curvesRoadAxis = GetCurvesByDirectShapes(directshapeRoadAxis);
@@ -36,16 +36,19 @@ namespace SlabOnGradient.Models
         }
 
         // Получение линий границ плиты
-        public static Curve GetBoundCurve(UIApplication uiapp, out string elementIds)
+        public static List<Curve> GetBoundCurves(UIApplication uiapp, out string elementIds)
         {
+            Document doc = uiapp.ActiveUIDocument.Document;
             Selection sel = uiapp.ActiveUIDocument.Selection;
-            var boundCurvePicked = sel.PickObject(ObjectType.Element, "Выберете линию границы плиты");
+            var boundCurveReferences = sel.PickObjects(ObjectType.Element, new ModelCurveClassFilter(), "Выберете линии границы плиты");
             Options options = new Options();
-            Element curveElement = uiapp.ActiveUIDocument.Document.GetElement(boundCurvePicked);
-            elementIds = "Id" + curveElement.Id.IntegerValue;
-            var boundCurve = curveElement.get_Geometry(options).First() as Curve;
+            var boundCurvesELements = boundCurveReferences.Select(r => doc.GetElement(r));
+            elementIds = ElementIdToString(boundCurvesELements);
+            var boundCurves = boundCurvesELements.OfType<ModelCurve>()
+                                                 .Select(ml => ml.GeometryCurve)
+                                                 .ToList();
 
-            return boundCurve;
+            return boundCurves;
         }
 
         // Получение линии из списка, которая пересекается с плоскостью

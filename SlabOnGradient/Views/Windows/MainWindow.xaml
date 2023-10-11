@@ -108,6 +108,33 @@
                 </UniformGrid>
             </UniformGrid>
         </GroupBox>
+        <GroupBox Header="Плита"
+                  Style="{StaticResource BorderGroupStyle}">
+            <StackPanel>
+                <UniformGrid Columns="2">
+                    <UniformGrid Rows="2">
+                        <TextBlock Text="Линии плиты"
+                                   Style="{StaticResource TextAboveButton}" />
+                        <Button Style="{StaticResource SelectButton}"
+                                Command="{Binding GetBlockElementsCommand}" />
+                    </UniformGrid>
+                    <TextBox Text="{Binding BlockElementIds}"
+                             Style="{StaticResource SelectedItemsBox}" />
+                </UniformGrid>
+                <DockPanel Margin="0,10,0,0">
+                    <TextBlock Text="Толщина покрытия, мм"
+                               Style="{StaticResource TextAboveButton}"
+                               Margin="20,0,0,0" />
+                    <TextBox Text="{Binding BlockHeight, UpdateSourceTrigger=PropertyChanged}"
+                             Height="20"
+                             Width="50"
+                             HorizontalAlignment="Right"
+                             TextAlignment="Center"
+                             VerticalContentAlignment="Center"
+                             Margin="0,0,107,0" />
+                </DockPanel>
+            </StackPanel>
+        </GroupBox>
         <GroupBox Header="Создание"
                   Style="{StaticResource BorderGroupStyle}">
             <UniformGrid Columns="2"
