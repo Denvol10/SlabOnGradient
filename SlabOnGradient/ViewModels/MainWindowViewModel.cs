@@ -76,6 +76,16 @@ namespace SlabOnGradient.ViewModels
         }
         #endregion
 
+        #region Толщина покрытия
+        private double _coatingThikness = Properties.Settings.Default.CoatingThikness;
+
+        public double CoatingThikness
+        {
+            get => _coatingThikness;
+            set => Set(ref _coatingThikness, value);
+        }
+        #endregion
+
         #region Команды
 
 
@@ -170,6 +180,7 @@ namespace SlabOnGradient.ViewModels
             Properties.Settings.Default.RoadLineElemIds1 = RoadLineElemIds1;
             Properties.Settings.Default.RoadLineElemIds2 = RoadLineElemIds2;
             Properties.Settings.Default.BorderSlabElemIds = BorderSlabElemIds;
+            Properties.Settings.Default.CoatingThikness = CoatingThikness;
             Properties.Settings.Default.Save();
         }
 

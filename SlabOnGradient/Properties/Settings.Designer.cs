@@ -70,5 +70,17 @@ namespace SlabOnGradient.Properties {
                 this["BorderSlabElemIds"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double CoatingThikness {
+            get {
+                return ((double)(this["CoatingThikness"]));
+            }
+            set {
+                this["CoatingThikness"] = value;
+            }
+        }
     }
 }

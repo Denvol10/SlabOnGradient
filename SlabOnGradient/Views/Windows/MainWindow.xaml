@@ -125,7 +125,7 @@
                     <TextBlock Text="Толщина покрытия, мм"
                                Style="{StaticResource TextAboveButton}"
                                Margin="20,0,0,0" />
-                    <TextBox Text="{Binding BlockHeight, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding CoatingThikness, UpdateSourceTrigger=PropertyChanged}"
                              Height="20"
                              Width="50"
                              HorizontalAlignment="Right"
