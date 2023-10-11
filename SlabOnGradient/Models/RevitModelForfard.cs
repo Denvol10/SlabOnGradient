@@ -11,6 +11,7 @@ using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Architecture;
 using System.Collections.ObjectModel;
 using SlabOnGradient.Models;
+using System.IO;
 
 namespace SlabOnGradient
 {
@@ -55,14 +56,7 @@ namespace SlabOnGradient
         }
         #endregion
 
-        #region Проверка на то существует линия границы плиты
-        public bool IsBoundLineExistInModel(string elemIdsInSettings)
-        {
-            var elemIds = RevitGeometryUtils.GetIdsByString(elemIdsInSettings);
 
-            return RevitGeometryUtils.IsElemsExistInModel(Doc, elemIds, typeof(ModelLine));
-        }
-        #endregion
 
         #region Получение оси трассы из Settings
         public void GetAxisBySettings(string elemIdsInSettings)
@@ -134,5 +128,21 @@ namespace SlabOnGradient
         {
             BorderSlabLines = RevitGeometryUtils.GetBoundCurves(Uiapp, out _borderSlabLinesElemIds);
         }
+
+        #region Проверка на то существует линия границы плиты
+        public bool IsBoundLinesExistInModel(string elemIdsInSettings)
+        {
+            var elemIds = RevitGeometryUtils.GetIdsByString(elemIdsInSettings);
+
+            return RevitGeometryUtils.IsElemsExistInModel(Doc, elemIds, typeof(ModelCurve));
+        }
+        #endregion
+
+        #region Получение границ плиты из Settings
+        public void GetBorderSlabBySettings(string elemIdsInSettings)
+        {
+            BorderSlabLines = RevitGeometryUtils.GetBoundCurvesById(Doc, elemIdsInSettings);
+        }
+        #endregion
     }
 }

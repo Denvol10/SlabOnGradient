@@ -133,7 +133,7 @@ namespace SlabOnGradient.Models
             {
                 ElementId id = new ElementId(elem);
                 Element curElem = doc.GetElement(id);
-                if (curElem is null || !(curElem.GetType() == type))
+                if (curElem is null || !(curElem.GetType().IsSubclassOf(type) || curElem.GetType() == type))
                 {
                     return false;
                 }
@@ -158,16 +158,15 @@ namespace SlabOnGradient.Models
             return lines;
         }
 
-        // Получение линии по Id
-        public static Curve GetBoundCurveById(Document doc, string elemIdInSettings)
+        // Получение линии границ плиты по Id
+        public static List<Curve> GetBoundCurvesById(Document doc, string elemIdInSettings)
         {
-            var elemId = GetIdsByString(elemIdInSettings).First();
-            ElementId modelLineId = new ElementId(elemId);
-            Element modelLine = doc.GetElement(modelLineId);
-            Options options = new Options();
-            Curve line = modelLine.get_Geometry(options).First() as Curve;
+            var elemId = GetIdsByString(elemIdInSettings);
+            var modelCurvesId = elemId.Select(id => new ElementId(id));
+            var modelCurveElems = modelCurvesId.Select(id => doc.GetElement(id)).OfType<ModelCurve>();
+            var curves = modelCurveElems.Select(c => c.GeometryCurve).ToList();
 
-            return line;
+            return curves;
         }
 
         // Получение линий на основе элементов DirectShape

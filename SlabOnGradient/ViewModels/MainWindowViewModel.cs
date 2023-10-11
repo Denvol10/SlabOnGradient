@@ -169,6 +169,7 @@ namespace SlabOnGradient.ViewModels
             Properties.Settings.Default.RoadAxisElemIds = RoadAxisElemIds;
             Properties.Settings.Default.RoadLineElemIds1 = RoadLineElemIds1;
             Properties.Settings.Default.RoadLineElemIds2 = RoadLineElemIds2;
+            Properties.Settings.Default.BorderSlabElemIds = BorderSlabElemIds;
             Properties.Settings.Default.Save();
         }
 
@@ -212,6 +213,18 @@ namespace SlabOnGradient.ViewModels
                 {
                     RoadLineElemIds2 = line2ElementIdInSettings;
                     RevitModel.GetRoadLines2BySettings(line2ElementIdInSettings);
+                }
+            }
+            #endregion
+
+            #region Инициализация значения границ плиты
+            if (!(Properties.Settings.Default.BorderSlabElemIds is null))
+            {
+                string borderSlabElemIdInSettings = Properties.Settings.Default.BorderSlabElemIds;
+                if (RevitModel.IsBoundLinesExistInModel(borderSlabElemIdInSettings) && !string.IsNullOrEmpty(borderSlabElemIdInSettings))
+                {
+                    BorderSlabElemIds = borderSlabElemIdInSettings;
+                    RevitModel.GetBorderSlabBySettings(borderSlabElemIdInSettings);
                 }
             }
             #endregion

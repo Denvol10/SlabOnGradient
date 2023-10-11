@@ -58,5 +58,17 @@ namespace SlabOnGradient.Properties {
                 this["RoadLineElemIds2"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string BorderSlabElemIds {
+            get {
+                return ((string)(this["BorderSlabElemIds"]));
+            }
+            set {
+                this["BorderSlabElemIds"] = value;
+            }
+        }
     }
 }
