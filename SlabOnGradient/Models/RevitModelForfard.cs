@@ -147,14 +147,14 @@ namespace SlabOnGradient
         public void CreateSlabOnGradient(double coatingThikness)
         {
             double step = 0.5;
-            var points = RevitGeometryUtils.GetPointsOnBoundCurves(BorderSlabLines, step);
+            var borderCurves = RevitGeometryUtils.GetBorderCurves(BorderSlabLines, step);
 
             using (Transaction trans = new Transaction(Doc, "Slab Created"))
             {
                 trans.Start();
-                foreach (var curvePoints in points)
+                foreach (var borderCurve in borderCurves)
                 {
-                    foreach(var point in curvePoints)
+                    foreach(var point in borderCurve.PlanePoints)
                     {
                         Doc.FamilyCreate.NewReferencePoint(point);
                     }
