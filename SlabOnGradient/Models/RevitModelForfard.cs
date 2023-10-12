@@ -56,8 +56,6 @@ namespace SlabOnGradient
         }
         #endregion
 
-
-
         #region Получение оси трассы из Settings
         public void GetAxisBySettings(string elemIdsInSettings)
         {
@@ -142,6 +140,28 @@ namespace SlabOnGradient
         public void GetBorderSlabBySettings(string elemIdsInSettings)
         {
             BorderSlabLines = RevitGeometryUtils.GetBoundCurvesById(Doc, elemIdsInSettings);
+        }
+        #endregion
+
+        #region Создать участок плиты на уклоне
+        public void CreateSlabOnGradient(double coatingThikness)
+        {
+            double step = 0.5;
+            var points = RevitGeometryUtils.GetPointsOnBoundCurves(BorderSlabLines, step);
+
+            using (Transaction trans = new Transaction(Doc, "Slab Created"))
+            {
+                trans.Start();
+                foreach (var curvePoints in points)
+                {
+                    foreach(var point in curvePoints)
+                    {
+                        Doc.FamilyCreate.NewReferencePoint(point);
+                    }
+                }
+
+                trans.Commit();
+            }
         }
         #endregion
     }

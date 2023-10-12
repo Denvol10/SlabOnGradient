@@ -157,6 +157,21 @@ namespace SlabOnGradient.ViewModels
         }
         #endregion
 
+        #region Создать плиту на уклоне
+        public ICommand CreateSlabCommand { get; }
+
+        private void OnCreateSlabCommandExecuted(object parameter)
+        {
+            RevitModel.CreateSlabOnGradient(CoatingThikness);
+            RevitCommand.mainView.Close();
+        }
+
+        private bool CanCreateSlabCommandExecute(object parameter)
+        {
+            return true;
+        }
+        #endregion
+
         #region Закрыть окно
         public ICommand CloseWindowCommand { get; }
 
@@ -251,6 +266,8 @@ namespace SlabOnGradient.ViewModels
             GetRoadLines2 = new LambdaCommand(OnGetRoadLines2CommandExecuted, CanGetRoadLines2CommandExecute);
 
             GetBorderSlabCommand = new LambdaCommand(OnGetBorderSlabCommandExecuted, CanGetBorderSlabCommandExecute);
+
+            CreateSlabCommand = new LambdaCommand(OnCreateSlabCommandExecuted, CanCreateSlabCommandExecute);
 
             CloseWindowCommand = new LambdaCommand(OnCloseWindowCommandExecuted, CanCloseWindowCommandExecute);
 

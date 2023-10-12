@@ -169,6 +169,24 @@ namespace SlabOnGradient.Models
             return curves;
         }
 
+        // Получение точек на линиях границ плиты
+        public static List<List<XYZ>> GetPointsOnBoundCurves(IEnumerable<Curve> curves, double step)
+        {
+            double interUnitsStep = UnitUtils.ConvertToInternalUnits(step, UnitTypeId.Meters);
+            var pointsOnCurves = new List<List<XYZ>>();
+
+            foreach (var curve in curves)
+            {
+                double length = curve.Length;
+                int countPoints = (int)(length / interUnitsStep);
+                var normParameters = GenerateNormalizeParameters(countPoints);
+                var points = normParameters.Select(p => curve.Evaluate(p, true)).ToList();
+                pointsOnCurves.Add(points);
+            }
+
+            return pointsOnCurves;
+        }
+
         // Получение линий на основе элементов DirectShape
         private static List<Curve> GetCurvesByDirectShapes(IEnumerable<DirectShape> directShapes)
         {
@@ -214,6 +232,47 @@ namespace SlabOnGradient.Models
             string resultString = string.Join(", ", stringArr);
 
             return resultString;
+        }
+
+        // Генератор нормализованных пораметров точек на линии
+        private static List<double> GenerateNormalizeParameters(int count)
+        {
+            var parameters = new List<double>(count) { 0, 1 };
+
+            switch (count)
+            {
+                case 0:
+                    return new List<double>() { 0, 1 };
+                case 1:
+                    return new List<double>() { 0, 1 };
+                default:
+                    double step = (double)1 / (count - 2);
+                    if (count % 2 == 0)
+                    {
+                        for (double d = 0.5 - step / 2; d > 0; d -= step)
+                        {
+                            parameters.Add(d);
+                        }
+                        for (double d = 0.5 + step / 2; d < 1; d += step)
+                        {
+                            parameters.Add(d);
+                        }
+                    }
+                    else
+                    {
+                        for (double d = 0.5 - step; d > 0; d -= step)
+                        {
+                            parameters.Add(d);
+                        }
+                        for (double d = 0.5; d < 1; d += step)
+                        {
+                            parameters.Add(d);
+                        }
+                    }
+                    break;
+            }
+
+            return parameters.OrderBy(p => p).ToList();
         }
     }
 }
