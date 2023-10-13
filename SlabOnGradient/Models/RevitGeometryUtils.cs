@@ -172,7 +172,7 @@ namespace SlabOnGradient.Models
         // Получение точек на линиях границ плиты
         public static List<BorderCurve> GetBorderCurves(IEnumerable<Curve> curves, double step)
         {
-            double interUnitsStep = UnitUtils.ConvertToInternalUnits(step, UnitTypeId.Meters);
+            double interUnitsStep = UnitUtils.ConvertToInternalUnits(step, UnitTypeId.Millimeters);
             var borderCurves = new List<BorderCurve>();
 
             foreach (var curve in curves)

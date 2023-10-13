@@ -22,7 +22,7 @@ namespace SlabOnGradient.Models
             PlanePoints = normalizeParameters.Select(p => PlaneCurve.Evaluate(p, true)).ToList();
         }
 
-        public CurveByPoints CreateCurveByPoints(PolyCurve roadAxis,
+        public CurveByPoints CreateSlabCurveByPoints(PolyCurve roadAxis,
                                                     IEnumerable<Line> roadLine1,
                                                     IEnumerable<Line> roadLine2,
                                                     double coverageThikness, Document doc)
@@ -30,6 +30,22 @@ namespace SlabOnGradient.Models
             var points = ProjectPointsOnSlabSurface(roadAxis, roadLine1, roadLine2, coverageThikness);
             var referencePointsArray = new ReferencePointArray();
             foreach (var point in points)
+            {
+                referencePointsArray.Append(doc.FamilyCreate.NewReferencePoint(point));
+            }
+
+            CurveByPoints curveByPoints = doc.FamilyCreate.NewCurveByPoints(referencePointsArray);
+
+            return curveByPoints;
+        }
+
+        public CurveByPoints CreateRaisedCurve(Document doc)
+        {
+            double heightUnderBasePlane = UnitUtils.ConvertToInternalUnits(2, UnitTypeId.Meters);
+            XYZ upVector = XYZ.BasisZ * heightUnderBasePlane;
+            var raisedPoints = PlanePoints.Select(p => p + upVector);
+            var referencePointsArray = new ReferencePointArray();
+            foreach (var point in raisedPoints)
             {
                 referencePointsArray.Append(doc.FamilyCreate.NewReferencePoint(point));
             }
@@ -81,7 +97,9 @@ namespace SlabOnGradient.Models
                         {
                             projectPointOnCoverage = result.XYZPoint;
                             XYZ resultPoint = projectPointOnCoverage + thiknessVector * coverageThikness;
-                            pointsOnSlab.Add(resultPoint);
+                            var projectResult = verticalLine.Project(resultPoint);
+
+                            pointsOnSlab.Add(projectResult.XYZPoint);
                         }
                     }
                 }

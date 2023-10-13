@@ -10,7 +10,7 @@
         Background="#f0f0f0"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Height="415"
+        Height="438"
         Width="350">
     <Window.DataContext>
         <vm:MainWindowViewModel />
@@ -126,6 +126,18 @@
                                Style="{StaticResource TextAboveButton}"
                                Margin="20,0,0,0" />
                     <TextBox Text="{Binding CoatingThikness, UpdateSourceTrigger=PropertyChanged}"
+                             Height="20"
+                             Width="50"
+                             HorizontalAlignment="Right"
+                             TextAlignment="Center"
+                             VerticalContentAlignment="Center"
+                             Margin="0,0,107,0" />
+                </DockPanel>
+                <DockPanel Margin="0,3,0,0">
+                    <TextBlock Text="Шаг разбивки, мм"
+                               Style="{StaticResource TextAboveButton}"
+                               Margin="20,0,0,0" />
+                    <TextBox Text="{Binding Step, UpdateSourceTrigger=PropertyChanged}"
                              Height="20"
                              Width="50"
                              HorizontalAlignment="Right"

@@ -73,13 +73,25 @@ namespace SlabOnGradient.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("93")]
         public double CoatingThikness {
             get {
                 return ((double)(this["CoatingThikness"]));
             }
             set {
                 this["CoatingThikness"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        public double Step {
+            get {
+                return ((double)(this["Step"]));
+            }
+            set {
+                this["Step"] = value;
             }
         }
     }

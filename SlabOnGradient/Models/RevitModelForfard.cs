@@ -144,18 +144,32 @@ namespace SlabOnGradient
         #endregion
 
         #region Создать участок плиты на уклоне
-        public void CreateSlabOnGradient(double coatingThikness)
+        public void CreateSlabOnGradient(double coatingThikness, double step)
         {
-            double step = 1;
             var borderCurves = RevitGeometryUtils.GetBorderCurves(BorderSlabLines, step);
 
             using (Transaction trans = new Transaction(Doc, "Slab Created"))
             {
                 trans.Start();
+
+                ReferenceArrayArray curvesForLoft = new ReferenceArrayArray();
+
+                ReferenceArray slabProjectCurves = new ReferenceArray();
+                ReferenceArray raisedCurves = new ReferenceArray();
+
                 foreach (var borderCurve in borderCurves)
                 {
-                    var curveByPoints = borderCurve.CreateCurveByPoints(RoadAxis, RoadLines1, RoadLines2, 93, Doc);
+                    var curveByPointsOnSlab = borderCurve.CreateSlabCurveByPoints(RoadAxis, RoadLines1, RoadLines2, coatingThikness, Doc);
+                    slabProjectCurves.Append(curveByPointsOnSlab.GeometryCurve.Reference);
+
+                    var raisedCurve = borderCurve.CreateRaisedCurve(Doc);
+                    raisedCurves.Append(raisedCurve.GeometryCurve.Reference);
                 }
+
+                curvesForLoft.Append(slabProjectCurves);
+                curvesForLoft.Append(raisedCurves);
+
+                var loftForm = Doc.FamilyCreate.NewLoftForm(true, curvesForLoft);
 
                 trans.Commit();
             }

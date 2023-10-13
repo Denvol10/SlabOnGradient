@@ -86,6 +86,16 @@ namespace SlabOnGradient.ViewModels
         }
         #endregion
 
+        #region Шаг разбивки
+        private double _step = Properties.Settings.Default.Step;
+
+        public double Step
+        {
+            get => _step;
+            set => Set(ref _step, value);
+        }
+        #endregion
+
         #region Команды
 
 
@@ -162,7 +172,7 @@ namespace SlabOnGradient.ViewModels
 
         private void OnCreateSlabCommandExecuted(object parameter)
         {
-            RevitModel.CreateSlabOnGradient(CoatingThikness);
+            RevitModel.CreateSlabOnGradient(CoatingThikness, Step);
             RevitCommand.mainView.Close();
         }
 
@@ -196,6 +206,7 @@ namespace SlabOnGradient.ViewModels
             Properties.Settings.Default.RoadLineElemIds2 = RoadLineElemIds2;
             Properties.Settings.Default.BorderSlabElemIds = BorderSlabElemIds;
             Properties.Settings.Default.CoatingThikness = CoatingThikness;
+            Properties.Settings.Default.Step = Step;
             Properties.Settings.Default.Save();
         }
 

@@ -15,7 +15,10 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="CoatingThikness" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">0</Value>
+      <Value Profile="(Default)">93</Value>
+    </Setting>
+    <Setting Name="Step" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">1000</Value>
     </Setting>
   </Settings>
 </SettingsFile>
