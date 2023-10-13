@@ -98,7 +98,6 @@ namespace SlabOnGradient.ViewModels
 
         #region Команды
 
-
         #region Получение оси трассы
         public ICommand GetRoadAxis { get; }
 
@@ -173,6 +172,7 @@ namespace SlabOnGradient.ViewModels
         private void OnCreateSlabCommandExecuted(object parameter)
         {
             RevitModel.CreateSlabOnGradient(CoatingThikness, Step);
+            SaveSettings();
             RevitCommand.mainView.Close();
         }
 
