@@ -154,11 +154,7 @@ namespace SlabOnGradient
                 trans.Start();
                 foreach (var borderCurve in borderCurves)
                 {
-                    var resultPoints = borderCurve.ProjectPointsOnSlabSurface(RoadAxis, RoadLines1, RoadLines2, 93);
-                    foreach(var point in resultPoints)
-                    {
-                        Doc.FamilyCreate.NewReferencePoint(point);
-                    }
+                    var curveByPoints = borderCurve.CreateCurveByPoints(RoadAxis, RoadLines1, RoadLines2, 93, Doc);
                 }
 
                 trans.Commit();

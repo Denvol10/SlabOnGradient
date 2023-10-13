@@ -22,7 +22,24 @@ namespace SlabOnGradient.Models
             PlanePoints = normalizeParameters.Select(p => PlaneCurve.Evaluate(p, true)).ToList();
         }
 
-        public List<XYZ> ProjectPointsOnSlabSurface(PolyCurve roadAxis,
+        public CurveByPoints CreateCurveByPoints(PolyCurve roadAxis,
+                                                    IEnumerable<Line> roadLine1,
+                                                    IEnumerable<Line> roadLine2,
+                                                    double coverageThikness, Document doc)
+        {
+            var points = ProjectPointsOnSlabSurface(roadAxis, roadLine1, roadLine2, coverageThikness);
+            var referencePointsArray = new ReferencePointArray();
+            foreach (var point in points)
+            {
+                referencePointsArray.Append(doc.FamilyCreate.NewReferencePoint(point));
+            }
+
+            CurveByPoints curveByPoints = doc.FamilyCreate.NewCurveByPoints(referencePointsArray);
+
+            return curveByPoints;
+        }
+
+        private List<XYZ> ProjectPointsOnSlabSurface(PolyCurve roadAxis,
                                                     IEnumerable<Line> roadLine1,
                                                     IEnumerable<Line> roadLine2,
                                                     double coverageThikness)
