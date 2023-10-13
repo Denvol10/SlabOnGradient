@@ -22,6 +22,57 @@ namespace SlabOnGradient.Models
             PlanePoints = normalizeParameters.Select(p => PlaneCurve.Evaluate(p, true)).ToList();
         }
 
+        public List<XYZ> ProjectPointsOnSlabSurface(PolyCurve roadAxis,
+                                                    IEnumerable<Line> roadLine1,
+                                                    IEnumerable<Line> roadLine2,
+                                                    double coverageThikness)
+        {
+            var pointsOnSlab = new List<XYZ>();
+            coverageThikness = UnitUtils.ConvertToInternalUnits(coverageThikness, UnitTypeId.Millimeters);
+
+            foreach (var planePoint in PlanePoints)
+            {
+                Plane normalPlane = roadAxis.GetNormalPlane(planePoint);
+                Line lineOnRoad1 = RevitGeometryUtils.GetIntersectCurve(roadLine1, normalPlane);
+                Line lineOnRoad2 = RevitGeometryUtils.GetIntersectCurve(roadLine2, normalPlane);
+
+                if (lineOnRoad1 is null || lineOnRoad2 is null)
+                {
+                    continue;
+                }
+
+                XYZ point1 = RevitGeometryUtils.LinePlaneIntersection(lineOnRoad1, normalPlane, out _);
+                XYZ point2 = RevitGeometryUtils.LinePlaneIntersection(lineOnRoad2, normalPlane, out _);
+
+                XYZ projectLineDirection = point1 - point2;
+                Line projectionLine = Line.CreateUnbound(point1, projectLineDirection);
+                Line verticalLine = Line.CreateUnbound(planePoint, XYZ.BasisZ);
+
+                IntersectionResultArray interResult;
+                var compResult = projectionLine.Intersect(verticalLine, out interResult);
+                XYZ thiknessVector = projectLineDirection.CrossProduct(normalPlane.Normal).Normalize();
+                if (thiknessVector.Z > 0)
+                {
+                    thiknessVector = thiknessVector.Negate();
+                }
+                XYZ projectPointOnCoverage = null;
+                if (compResult == SetComparisonResult.Overlap)
+                {
+                    foreach (var elem in interResult)
+                    {
+                        if (elem is IntersectionResult result)
+                        {
+                            projectPointOnCoverage = result.XYZPoint;
+                            XYZ resultPoint = projectPointOnCoverage + thiknessVector * coverageThikness;
+                            pointsOnSlab.Add(resultPoint);
+                        }
+                    }
+                }
+            }
+
+            return pointsOnSlab;
+        }
+
         // Генератор нормализованных пораметров точек на линии
         private List<double> GenerateNormalizeParameters(int count)
         {

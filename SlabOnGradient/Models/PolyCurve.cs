@@ -109,6 +109,27 @@ namespace SlabOnGradient.Models
             return false;
         }
 
+        public Plane GetNormalPlane(XYZ projectPoint)
+        {
+            double minProjectDistance = double.PositiveInfinity;
+            XYZ pointOnCurve = null;
+            foreach(var curve in Curves)
+            {
+                var interResult = curve.Project(projectPoint);
+                if (interResult.Distance < minProjectDistance)
+                {
+                    minProjectDistance = interResult.Distance;
+                    pointOnCurve = interResult.XYZPoint;
+                }
+            }
+
+            XYZ thirdPoint = XYZ.BasisZ + projectPoint;
+
+            Plane plane = Plane.CreateByThreePoints(projectPoint, pointOnCurve, thirdPoint);
+
+            return plane;
+        }
+
         public XYZ GetPointOnPolycurve(double parameter, out Curve targetCurve)
         {
             XYZ point = null;

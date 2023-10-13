@@ -146,7 +146,7 @@ namespace SlabOnGradient
         #region Создать участок плиты на уклоне
         public void CreateSlabOnGradient(double coatingThikness)
         {
-            double step = 0.5;
+            double step = 1;
             var borderCurves = RevitGeometryUtils.GetBorderCurves(BorderSlabLines, step);
 
             using (Transaction trans = new Transaction(Doc, "Slab Created"))
@@ -154,7 +154,8 @@ namespace SlabOnGradient
                 trans.Start();
                 foreach (var borderCurve in borderCurves)
                 {
-                    foreach(var point in borderCurve.PlanePoints)
+                    var resultPoints = borderCurve.ProjectPointsOnSlabSurface(RoadAxis, RoadLines1, RoadLines2, 93);
+                    foreach(var point in resultPoints)
                     {
                         Doc.FamilyCreate.NewReferencePoint(point);
                     }
